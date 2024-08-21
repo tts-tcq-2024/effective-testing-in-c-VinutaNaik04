@@ -1,7 +1,11 @@
+#include <stdio.h>
+#include <assert.h>
+#include <string.h>
+#include "message.h"
+#include "alerter.h"
 
-int alertFailureCount = 0;
 
-int networkAlerter(float celcius) {
+int networkAlertMock(float celcius) {
     printMsg(celcius);
     // Return 200 for ok
     // Return 500 for not-ok
@@ -9,14 +13,14 @@ int networkAlerter(float celcius) {
     return 200;
 }
 
-void alertInCelcius(float farenheit,int (*networkAlert)(float)) {
-    float celcius = (farenheit - 32) * 5 / 9;
-    int returnCode = networkAlert(celcius);
-    if (returnCode != 200) {
-        // non-ok response is not an error! Issues happen in life!
-        // let us keep a count of failures to report
-        // However, this code doesn't count failures!
-        // Add a test below to catch this bug. Alter the stub above, if needed.
-        alertFailureCount += 0;
-    }
+
+
+int main() {
+    alertInCelcius(400.5,networkAlertMock);
+    alertInCelcius(303.6,networkAlertMock);
+    assert(alertFailureCount==1);
+    assert(alertFailureCount==0);
+    printf("%d alerts failed.\n", alertFailureCount);
+    printf("All is well (maybe!)\n");
+    return 0;
 }
